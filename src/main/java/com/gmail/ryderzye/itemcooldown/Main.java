@@ -2,20 +2,15 @@ package com.gmail.ryderzye.itemcooldown;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by marc on 05.01.17.
@@ -85,37 +80,6 @@ public class Main extends JavaPlugin implements Listener {
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.scheduleSyncDelayedTask(this, task, 1L);
-    }
-
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        System.out.println("Test/Debugging");
-        Player player = event.getPlayer();
-
-        List<String> listOfCooldownItems = new ArrayList<String>();
-        ConfigurationSection configSection = this.getConfig().getConfigurationSection("items");
-        System.out.println(configSection.toString());
-        System.out.println(listOfCooldownItems);
-        for(String cooldownItemName : configSection.getKeys(false)) {
-            if (!player.hasPermission(this.getConfig().getString("items." + cooldownItemName + ".bypasspermissions"))) {
-                System.out.println(cooldownItemName);
-                listOfCooldownItems.add(cooldownItemName);
-            }
-        }
-        System.out.println(configSection.getKeys(false));
-        System.out.println(listOfCooldownItems);
-        setCooldowns(player, listOfCooldownItems);
-    }
-
-    private void setCooldowns(Player player, List<String> listOfCooldownItems) {
-        Material material;
-        int cooldownTime;
-        for (String item : listOfCooldownItems) {
-            cooldownTime = getItemCooldownConfig(item);
-            material = Material.getMaterial(item);
-            player.setCooldown(material, cooldownTime);
-            System.out.println(material.toString() + " cooldown set to " + cooldownTime);
-        }
     }
 }
 
