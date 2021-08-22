@@ -59,15 +59,12 @@ public class Main extends JavaPlugin implements Listener {
         }
         if (isCooldownItem(material)) {
             if(player.getCooldown(material) != 0) {
-                player.sendMessage("main hand has cooldown, cancelled event");
                 event.setCancelled(true);
             } else {
                 event.setUseItemInHand(Event.Result.ALLOW);
                 sendPacket(player, material, getItemCooldownConfig(material.toString()));
-                player.sendMessage("set cooldown");
             }
         }
-        player.sendMessage("end");
     }
 
     private void sendPacket(Player player, Material material, int ticksLeft) {
