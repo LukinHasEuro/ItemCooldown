@@ -1,14 +1,10 @@
 #bypasspermission ^= players that have these permissions wont get any cooldowns.
 items:
-  STICK:
-    cooldown: 10
-    message: '<red>You must wait #SECONDS# seconds before you can use this nice stick again.'
-    bypasspermissions: itemcooldown.stick
   ENDER_PEARL:
     cooldown: 10
     message: '<aqua>You must wait #SECONDS# seconds before you can teleport again.'
     bypasspermissions: itemcooldown.enderpearl
   GOLDEN_APPLE:
-    cooldown: 10
+    cooldown: 5
     message: '<aqua>You must wait #SECONDS# seconds before you can teleport again.'
     bypasspermissions: itemcooldown.goldenapple
