@@ -1,5 +1,6 @@
-package com.gmail.ryderzye.itemcooldown;
+package com.gmail.ryderzye.itemcooldown.Listener;
 
+import com.gmail.ryderzye.itemcooldown.ItemCooldown;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -9,35 +10,25 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-/**
- * Created by marc on 05.01.17.
- */
-public class Main extends JavaPlugin implements Listener {
-
-    @Override
-    public void onEnable() {
-        this.saveDefaultConfig();
-        this.getServer().getPluginManager().registerEvents(this, this);
-
-        getLogger().info("ItemCooldown is enabled");
+public class PlayerInteractionEventListener implements Listener {
+    public PlayerInteractionEventListener() {
     }
 
     private boolean isCooldownItem(Material material) {
-        return this.getConfig().isSet("items." + material.toString());
+        return ItemCooldown.get().getConfig().isSet("items." + material.toString());
     }
 
     private boolean hasBypassPermission(Player p, Material materialOfItem) {
-        String permission = this.getConfig().getString("items." + materialOfItem.toString() + ".bypasspermissions");
+        String permission = ItemCooldown.get().getConfig().getString("items." + materialOfItem.toString() + ".bypasspermissions");
         if (permission != null)
             return p.hasPermission(permission);
         return false;
     }
 
     private Integer getItemCooldownConfig(String itemName) {
-        return 20 * this.getConfig().getInt("items." + itemName + ".cooldown");
+        return 20 * ItemCooldown.get().getConfig().getInt("items." + itemName + ".cooldown");
     }
 
     @EventHandler
@@ -55,6 +46,11 @@ public class Main extends JavaPlugin implements Listener {
         Material material = item.getType();
 
         if (hasBypassPermission(player, material)) {
+            // has cooldown bypass permission, only vanilla cooldown is present
+            return;
+        }
+        if (material.isEdible()) {
+            // edible items are handled by PlayerItemConsumeEvent
             return;
         }
         if (isCooldownItem(material)) {
@@ -76,7 +72,6 @@ public class Main extends JavaPlugin implements Listener {
         };
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
-        scheduler.scheduleSyncDelayedTask(this, task, 1L);
+        scheduler.scheduleSyncDelayedTask(ItemCooldown.get(), task, 1L);
     }
 }
-

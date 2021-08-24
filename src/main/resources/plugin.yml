@@ -1,4 +1,4 @@
-main: com.gmail.ryderzye.itemcooldown.Main
+main: com.gmail.ryderzye.itemcooldown.ItemCooldown
 version: 1.0
 name: ItemCooldown
 api-version: 1.16
